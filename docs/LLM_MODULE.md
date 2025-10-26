@@ -262,21 +262,7 @@ This module integrates with other TokSmith services:
 5. **Testing**: Write tests for new functionality
 6. **Documentation**: Keep docs updated with code changes
 
-## 🔒 Security
 
-- API keys stored in environment variables
-- Never log or expose API keys
-- Use HTTPS for API calls
-- Validate all input data
-- Sanitize LLM responses
-
-## 📚 Additional Resources
-
-- [Detailed Service Documentation](app/services/llm_service/README.md)
-- [Usage Example](examples/llm_service_example.py)
-- [Unit Tests](tests/test_llm_service.py)
-- [Gemini API Docs](https://ai.google.dev/docs)
-- [Pydantic Documentation](https://docs.pydantic.dev/)
 
 ## 🐛 Troubleshooting
 
@@ -289,23 +275,9 @@ This module integrates with other TokSmith services:
 - Check Gemini API quota and limits
 - Verify network connectivity
 - Review LLM response in logs
-- Fallback to mock script will be used automatically
 
 ### Import errors
 - Ensure all dependencies are installed: `pip install -r requirements.txt`
 - Check Python version (3.8+)
 - Verify virtual environment is activated
 
-## 📞 Support
-
-For issues or questions:
-1. Check the documentation in `app/services/llm_service/README.md`
-2. Review the example in `examples/llm_service_example.py`
-3. Check unit tests for usage patterns
-4. Refer to the PRD.md for project context
-
----
-
-**Version**: 1.0.0  
-**Last Updated**: 2025  
-**Status**: ✅ Production Ready
