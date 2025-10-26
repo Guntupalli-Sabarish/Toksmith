@@ -1,1 +1,17 @@
 # Python dependencies
+
+# Web Framework
+fastapi
+uvicorn[standard]
+pydantic
+
+# HTTP Client
+httpx
+
+# Environment
+python-dotenv
+
+# Testing (dev dependencies)
+pytest
+pytest-asyncio
+pytest-mock
