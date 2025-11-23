@@ -3,7 +3,7 @@ URL validation for different sources
 """
 import re
 from typing import Optional
-from src.models import InputSource
+from app.models.input import InputSource
 from loguru import logger
 
 

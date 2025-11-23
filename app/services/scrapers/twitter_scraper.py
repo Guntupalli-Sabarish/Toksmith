@@ -7,8 +7,8 @@ import tweepy
 from datetime import datetime
 from loguru import logger
 
-from src.config import settings
-from src.models import ScrapedContent, PostComment, InputSource
+from app.core.config import settings
+from app.models.input import ScrapedContent, PostComment, InputSource
 from .base_scraper import BaseScraper
 
 

@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import httpx
 from loguru import logger
 
-from src.models import ScrapedContent, PostComment, InputSource
+from app.models.input import ScrapedContent, PostComment, InputSource
 from .base_scraper import BaseScraper
 
 

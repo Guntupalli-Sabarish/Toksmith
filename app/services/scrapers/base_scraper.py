@@ -3,7 +3,7 @@ Base scraper class defining the interface for all scrapers
 """
 from abc import ABC, abstractmethod
 from typing import Optional
-from src.models import ScrapedContent, InputSource
+from app.models.input import ScrapedContent, InputSource
 
 
 class BaseScraper(ABC):

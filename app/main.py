@@ -7,9 +7,9 @@ from contextlib import asynccontextmanager
 from loguru import logger
 import sys
 
-from src.config import settings
-from src.api.routes import router
-# from src.database import init_db
+from app.core.config import settings
+# from app.api.routes import router
+# from app.database import init_db
 
 
 @asynccontextmanager

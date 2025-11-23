@@ -1,28 +1,4 @@
 """
-API routes for Input Layer
-"""
-import uuid
-from fastapi import APIRouter, HTTPException, BackgroundTasks
-from loguru import logger
-
-from src.models import (
-    ContentRequest,
-    ContentResponse,
-    ErrorResponse,
-    InputSource,
-    ScrapedContent,
-    Status
-)
-from src.service import InputService
-from src.url_validator import validate_url, infer_source_from_url
-from src.database import SessionLocal, ScrapeJob
-from src.tasks import process_scraped_content
-
-
-router = APIRouter(prefix="/api/v1/input", tags=["Input Layer"])
-input_service = InputService()
-
-
 @router.post(
     "/scrape",
     response_model=ContentResponse,

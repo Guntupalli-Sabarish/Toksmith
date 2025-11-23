@@ -4,8 +4,8 @@ Input Layer Service - Orchestrates scraping and content processing
 from loguru import logger
 from typing import List
 
-from src.models import InputSource, ScrapedContent
-from src.scrapers import (
+from app.models.input import InputSource, ScrapedContent
+from app.services.scrapers import (
     RedditScraper,
     TwitterScraper,
     StackOverflowScraper,
