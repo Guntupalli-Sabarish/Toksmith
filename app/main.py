@@ -8,7 +8,7 @@ from loguru import logger
 import sys
 
 from app.core.config import settings
-# from app.api.routes import router
+from app.api.route import router
 # from app.database import init_db
 
 
