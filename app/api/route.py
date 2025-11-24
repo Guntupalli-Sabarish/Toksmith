@@ -11,18 +11,20 @@ from app.models.script import Script, DialogueLine
 from app.core.config import settings
 from app.db.session import get_db
 from app.models.project import VideoProject, ProjectStatus
+from app.core.dependencies import get_input_service, get_llm_service, get_tts_service
 
 router = APIRouter()
-input_service = InputService()
-llm_service = LLMService(api_key=settings.gemini_api_key)
-tts_service = TTSService()
 
 @router.post(
     "/projects/init",
     summary="Initialize Project (Scrape)",
     description="Initialize a video project by scraping content from a URL"
 )
-async def init_project(request: ContentRequest, db: Session = Depends(get_db)):
+async def init_project(
+    request: ContentRequest, 
+    db: Session = Depends(get_db),
+    input_service: InputService = Depends(get_input_service)
+):
     if not request.url:
         raise HTTPException(status_code=400, detail="URL is required")
         
@@ -64,7 +66,11 @@ async def init_project(request: ContentRequest, db: Session = Depends(get_db)):
     summary="Confirm & Generate Script",
     description="Confirm scraped content and generate script"
 )
-async def confirm_project(project_id: str, db: Session = Depends(get_db)):
+async def confirm_project(
+    project_id: str, 
+    db: Session = Depends(get_db),
+    llm_service: LLMService = Depends(get_llm_service)
+):
     try:
         project = db.query(VideoProject).filter(VideoProject.id == project_id).first()
         if not project:
@@ -133,7 +139,11 @@ async def confirm_project(project_id: str, db: Session = Depends(get_db)):
     summary="Generate Audio",
     description="Generate audio for the script using TTS"
 )
-async def generate_audio(project_id: str, db: Session = Depends(get_db)):
+async def generate_audio(
+    project_id: str, 
+    db: Session = Depends(get_db),
+    tts_service: TTSService = Depends(get_tts_service)
+):
     try:
         project = db.query(VideoProject).filter(VideoProject.id == project_id).first()
         if not project:
