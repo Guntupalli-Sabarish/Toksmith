@@ -10,6 +10,7 @@ class ProjectStatus(str, enum.Enum):
     PENDING = "pending"
     SCRAPED = "scraped"
     SCRIPT_GENERATED = "script_generated"
+    AUDIO_GENERATED = "audio_generated"
     FAILED = "failed"
 
 class VideoProject(Base):

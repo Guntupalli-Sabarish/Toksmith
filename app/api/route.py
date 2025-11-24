@@ -6,6 +6,8 @@ import uuid
 from app.models.input import ContentRequest, InputSource
 from app.services.input_service.input_layer import InputService
 from app.services.llm_service.llm_service import LLMService, RawThreadData
+from app.services.tts_service import TTSService
+from app.models.script import Script, DialogueLine
 from app.core.config import settings
 from app.db.session import get_db
 from app.models.project import VideoProject, ProjectStatus
@@ -13,6 +15,7 @@ from app.models.project import VideoProject, ProjectStatus
 router = APIRouter()
 input_service = InputService()
 llm_service = LLMService(api_key=settings.gemini_api_key)
+tts_service = TTSService()
 
 @router.post(
     "/projects/init",
@@ -123,6 +126,66 @@ async def confirm_project(project_id: str, db: Session = Depends(get_db)):
 
     except Exception as e:
         logger.error(f"Script generation failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post(
+    "/projects/{project_id}/audio",
+    summary="Generate Audio",
+    description="Generate audio for the script using TTS"
+)
+async def generate_audio(project_id: str, db: Session = Depends(get_db)):
+    try:
+        project = db.query(VideoProject).filter(VideoProject.id == project_id).first()
+        if not project:
+            raise HTTPException(status_code=404, detail="Project not found")
+            
+        if project.status not in [ProjectStatus.SCRIPT_GENERATED, ProjectStatus.AUDIO_GENERATED]:
+            raise HTTPException(status_code=400, detail="Script must be generated first")
+
+        logger.info(f"Generating audio for project: {project_id}")
+        
+        # Reconstruct Script object
+        script_data = project.script_data
+        if not script_data:
+             raise HTTPException(status_code=400, detail="No script data found")
+
+        lines = [
+            DialogueLine(
+                speaker=line.get("speaker"),
+                text=line.get("text"),
+                audio_file_path=line.get("audio_file_path", ""),
+                start_time=line.get("start_time", 0),
+                duration=line.get("duration", 0)
+            )
+            for line in script_data.get("lines", [])
+        ]
+        
+        script = Script(
+            id=script_data.get("id", f"script_{project_id}"),
+            lines=lines,
+            background=script_data.get("background", "minecraft-parkour"),
+            characters=script_data.get("characters", [])
+        )
+        
+        # Generate Audio
+        output_dir = f"static/audio/{project_id}"
+        updated_script = await tts_service.generate_script_audio(script, output_dir=output_dir)
+        
+        # Update Project
+        project.script_data = updated_script.model_dump()
+        project.status = ProjectStatus.AUDIO_GENERATED
+        db.commit()
+        db.refresh(project)
+        
+        return {
+            "success": True,
+            "project_id": str(project.id),
+            "status": project.status,
+            "script": project.script_data
+        }
+
+    except Exception as e:
+        logger.error(f"Audio generation failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get(
