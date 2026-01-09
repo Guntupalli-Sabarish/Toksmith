@@ -116,5 +116,3 @@ If you want a very small repo (docs, tests, and unused scrapers removed), you ca
 - If `pytest` isn't installed and you want to run tests, install it with `pip install pytest`.
 
 ---
-
-If you'd like, I can now remove the non-essential files (docs/tests/logs) or prune scrapers to keep only Reddit. Tell me which you'd like removed and I'll do it and report back.
